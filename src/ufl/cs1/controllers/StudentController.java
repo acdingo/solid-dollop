@@ -54,10 +54,10 @@ public final class StudentController implements DefenderController {
 	}
 
 	public int defenderAmbush(Attacker attacker, Defender defender) {
-		List<Node> maybe = attacker.getPossibleLocations(true);
+		//List<Node> maybe = attacker.getPossibleLocations(true);
 		//List<Node> thisthing = attacker.getPossibleLocations(true);
-        int nextDir;
-		try {
+		//int nextDir;
+		/*try {
 			nextDir = defender.getNextDir(maybe.get(0), true);
 		}
 		catch(Exception e) {
@@ -76,5 +76,30 @@ public final class StudentController implements DefenderController {
 
 			return -1;
 	}
+	*/
+		List<Node> pathFinder;
+		int nextDir;
+		int nextDir2;
+		Node target;
+		Node scatter;
+
+		pathFinder = defender.getPathTo(attacker.getLocation());
+		target = defender.getTargetNode(pathFinder, true);
+		scatter = defender.getTargetNode(pathFinder, false);
+
+		nextDir = defender.getNextDir(target, true);
+		nextDir2 = defender.getNextDir(scatter, false);
+
+		if (!defender.isVulnerable() && defender.getLocation().getNeighbor(nextDir).isPill()) {
+
+			return nextDir;
+		} else if (defender.isVulnerable() && defender.getLocation().getNeighbor(nextDir2).isPill()) {
+
+			return nextDir2;
+		}
+		return -1;
+	}
+
+
 	}
 
