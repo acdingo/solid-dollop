@@ -3,6 +3,7 @@ package ufl.cs1.controllers;
 import game.controllers.DefenderController;
 import game.models.*;
 import game.system.*;
+import java.util.*;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public final class StudentController implements DefenderController {
 					actions[i] = defenderChase(attacker, defender);
 
 				else
-					actions[i] = defenderAmbush(attacker, defender);
+					actions[i] = defenderAmbush(attacker, defender, game);
 
 			} else
 				actions[i] = -1;
@@ -75,7 +76,7 @@ public final class StudentController implements DefenderController {
 	}
 
 
-	public int defenderAmbush(Attacker attacker, Defender defender) {
+	public int defenderAmbush(Attacker attacker, Defender defender, Game game) {
 		/*List<Node> maybe = attacker.getPossibleLocations(true);
 		List<Node> thisthing = attacker.getPossibleLocations(true);
 		int nextDir;
@@ -126,32 +127,51 @@ public final class StudentController implements DefenderController {
 		Node target;
 		Node attackerLocation;
 		int direction;
+		//Maze getCurMaze = new Maze();
+
+
+		List<Node> powerPillLocations;
+		List<Node> checkPillsAround;
+
+
+		// powerPillLocations = getCurMaze.getPowerPillNodes();
+		//checkPillsAround = attackerLocation.getNeighbors();
+
 
 		direction = attacker.getDirection();
 		attackerLocation = attacker.getLocation();
 		target = attackerLocation.getNeighbor(direction);
+		powerPillLocations = game.getPowerPillList();
+		checkPillsAround = attackerLocation.getNeighbors();
 
-        try {
+		try {
 			nextDir = defender.getNextDir(target, true);
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			nextDir = defender.getNextDir(attacker.getLocation(), true);
 		}
 		nextDir2 = defender.getNextDir(attacker.getLocation(), false);
 
 		if (!defender.isVulnerable() && defender.getLocation().getNeighbor(nextDir).isPill()) {
+			for (int i = 0; i < powerPillLocations.size(); i++) {
+				for (int j = 0; j < checkPillsAround.size(); j++) {
+					if (powerPillLocations.get(i) == checkPillsAround.get(j)) {
+						return (nextDir2);
+					}
+				}
+			}
 
 			return (nextDir);
 		} else if (defender.isVulnerable() && defender.getLocation().getNeighbor(nextDir2).isPill()) {
 
 			return (nextDir2);
 		}
-		return -1;
 
+		return -1;
+	}
 
 
 	}
-}
+
 
 
 
