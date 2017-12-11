@@ -40,107 +40,43 @@ public final class StudentController implements DefenderController {
 
 	public int defenderChase(Attacker attacker, Defender defender) {
 
-		int nextDir = defender.getNextDir(attacker.getLocation(), true);
-		int nextDir2 = defender.getNextDir(attacker.getLocation(), false);
+		Node attackerLocation = attacker.getLocation();
 
-		if (!defender.isVulnerable() && defender.getLocation().getNeighbor(nextDir).isPill()) {
+		int nextDir = defender.getNextDir(attackerLocation, true);
+		int nextDir2 = defender.getNextDir(attackerLocation, false);
+
+		Node checkPill = defender.getLocation().getNeighbor(nextDir);
+		Node checkPill2 = defender.getLocation().getNeighbor(nextDir2);
+
+		if (!defender.isVulnerable() && checkPill.isPill()){
 
 			return nextDir;
-		} else if (defender.isVulnerable() && defender.getLocation().getNeighbor(nextDir2).isPill()) {
+		}
+		else if (defender.isVulnerable() && checkPill2.isPill()) {
 
 			return nextDir2;
 		}
 
 		return -1;
-		/*List<Node> maybe = attacker.getPossibleLocations(true);
-		List<Node> thisthing = attacker.getPossibleLocations(true);
-		int nextDir;
-		try {
-			nextDir = defender.getNextDir(maybe.get(0), true);
-		}
-		catch(Exception e) {
-			nextDir = defender.getNextDir(attacker.getLocation(), true);
-		}
-		int nextDir2 = defender.getNextDir(attacker.getLocation(), false);
 
-
-		if (!defender.isVulnerable() && defender.getLocation().getNeighbor(nextDir).isPill()) {
-
-			return (nextDir);
-		} else if (defender.isVulnerable() && defender.getLocation().getNeighbor(nextDir2).isPill()) {
-
-			return (nextDir2);
-		}
-
-		return -1; */
 	}
 
 
 	public int defenderAmbush(Attacker attacker, Defender defender, Game game) {
-		/*List<Node> maybe = attacker.getPossibleLocations(true);
-		List<Node> thisthing = attacker.getPossibleLocations(true);
-		int nextDir;
-		try {
-			nextDir = defender.getNextDir(maybe.get(0), true);
-		}
-		catch(Exception e) {
-			nextDir = defender.getNextDir(attacker.getLocation(), true);
-		}
-		int nextDir2 = defender.getNextDir(attacker.getLocation(), false);
-
-
-			if (!defender.isVulnerable() && defender.getLocation().getNeighbor(nextDir).isPill()) {
-
-				return (nextDir + 4);
-			} else if (defender.isVulnerable() && defender.getLocation().getNeighbor(nextDir2).isPill()) {
-
-				return (nextDir2 );
-			}
-
-			return -1;
-	} */
-
-		/*List<Node> pathFinder;
-		int nextDir;
-		int nextDir2;
-		Node target;
-		//Node scatter;
-
-		pathFinder = defender.getPathTo(attacker.getLocation());
-		target = defender.getTargetNode(pathFinder, true);
-		//scatter = defender.getTargetNode(pathFinder, false);
-
-		nextDir = defender.getNextDir(target, true);
-		nextDir2 = defender.getNextDir(attacker.getLocation(), false);
-
-		if (!defender.isVulnerable() && defender.getLocation().getNeighbor(nextDir).isPill()) {
-
-			return (nextDir + 1);
-		} else if (defender.isVulnerable() && defender.getLocation().getNeighbor(nextDir2).isPill()) {
-
-			return (nextDir2);
-		}
-		return -1; */
 
 		int nextDir;
 		int nextDir2;
 		Node target;
 		Node attackerLocation;
 		int direction;
-		//Maze getCurMaze = new Maze();
-
 
 		List<Node> powerPillLocations;
 		List<Node> checkPillsAround;
 
-
-		// powerPillLocations = getCurMaze.getPowerPillNodes();
-		//checkPillsAround = attackerLocation.getNeighbors();
-
-
 		direction = attacker.getDirection();
 		attackerLocation = attacker.getLocation();
 		target = attackerLocation.getNeighbor(direction);
+
 		powerPillLocations = game.getPowerPillList();
 		checkPillsAround = attackerLocation.getNeighbors();
 
@@ -159,18 +95,17 @@ public final class StudentController implements DefenderController {
 					}
 				}
 			}
-
 			return (nextDir);
-		} else if (defender.isVulnerable() && defender.getLocation().getNeighbor(nextDir2).isPill()) {
+		}
+
+		else if (defender.isVulnerable() && defender.getLocation().getNeighbor(nextDir2).isPill()) {
 
 			return (nextDir2);
 		}
 
 		return -1;
 	}
-
-
-	}
+}
 
 
 
